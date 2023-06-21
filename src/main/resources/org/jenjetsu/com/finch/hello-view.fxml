@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+      prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      onKeyPressed="#handleKeyPressed"
+      onKeyReleased="#stopFinch"
+      fx:controller="org.jenjetsu.com.finch.HelloController">
+   <children>
+      <Slider id="redRGBSlider" fx:id="redRGBSlider" layoutX="38.0" layoutY="31.0" max="100.0" value="100.0"/>
+      <Slider id="greenRGBSlider" fx:id="greenRGBSlider" layoutX="38.0" layoutY="58.0" max="100.0" value="100.0" />
+      <Slider id="blueRGBSlider" fx:id="blueRGBSlider" layoutX="38.0" layoutY="85.0" max="100.0" value="100.0" />
+      <Text layoutX="189.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" wrappingWidth="30.662109375" />
+      <Text layoutX="186.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GREEN" wrappingWidth="48.662109375" />
+      <Text layoutX="186.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLUE" wrappingWidth="37.662109375" />
+   </children>
+</Pane>
