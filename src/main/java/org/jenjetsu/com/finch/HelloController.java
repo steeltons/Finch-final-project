@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.jenjetsu.com.finch.library.Finch;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -79,6 +80,7 @@ public class HelloController implements Initializable{
 
     public void close() {
         System.out.println("stopped");
+        FinchMidiUtil.stopCurrentSong();
         if(isAutopilotActive) {
             finchAutopilotTimer.cancel();
             finchAutopilotTimer.purge();
@@ -94,9 +96,21 @@ public class HelloController implements Initializable{
     // Управление Finchом
     @FXML
     private void handleKeyPressed(KeyEvent ke) {
-        if(ke.getCode() == KeyCode.W || ke.getCode() == KeyCode.S || ke.getCode() == KeyCode.D || ke.getCode() == KeyCode.A) {
+        if (ke.getCode() == KeyCode.W || ke.getCode() == KeyCode.S || ke.getCode() == KeyCode.D || ke.getCode() == KeyCode.A) {
             if(!keys.contains(ke.getCode())) {
                 keys.add(ke.getCode());
+            }
+        } else if (ke.getCode() == KeyCode.E || ke.getCode() == KeyCode.R) {
+            if (FinchMidiUtil.isSongPlaying()) {
+                FinchMidiUtil.stopCurrentSong();
+            } else {
+                File f;
+                if (ke.getCode() == KeyCode.E) {
+                    f = new File("src/main/resources/midi_songs/Megalovania.mid");
+                } else {
+                    f = new File("src/main/resources/midi_songs/mario1.mid");
+                }
+                FinchMidiUtil.playSong(finch, f);
             }
         }
     }
@@ -216,6 +230,15 @@ public class HelloController implements Initializable{
                     finch.setDisplay(RussionLetterConverter.STANDART_DISPLAY);
                     int[] display = RussionLetterConverter.convertToDisplay(letter);
                     finch.setDisplay(display);
+                    if (message.isEmpty()) {
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                finch.setDisplay(RussionLetterConverter.STANDART_DISPLAY);
+                            }
+                        }, 1000l);
+                    }
                 }
             }
         }
@@ -311,19 +334,23 @@ public class HelloController implements Initializable{
         return new TimerTask() {
             @Override
             public void run() {
-                if(isBeepSignal) {
-                    finch.playNote(50, 2);
-                    isBeepSignal = false;
+                try {
+                    if(isBeepSignal) {
+                        finch.playNote(50, 2);
+                        isBeepSignal = false;
+                    }
+                    changeAllButtonsImage();
+                    showOnDisplay();
+                    changeFinchColor();
+                    changeDistance(finch.getDistance());
+                    updateFinchScreen(finch.getDistance());
+                    changeLight(finch.getLight("L"));
+                    rotateCompassArrow(finch.getCompass());
+                    moveFinch();
+                    changeArrowImage();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                changeAllButtonsImage();
-                showOnDisplay();
-                changeFinchColor();
-                changeDistance(finch.getDistance());
-                updateFinchScreen(finch.getDistance());
-                changeLight(finch.getLight("L"));
-                rotateCompassArrow(finch.getCompass());
-                moveFinch();
-                changeArrowImage();
             }
         };
     }
